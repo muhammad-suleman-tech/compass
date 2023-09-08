@@ -24,7 +24,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // const SplashScreen();
     fetchPermissionStatus();
   }
 
@@ -33,16 +32,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.blueGrey[600],
-        body: Builder(
-          builder: (context) {
-            if (_hasPermissions) {
-              return _buildCompass();
-            } else {
-              return _buildPermissionSheet();
-            }
-          },
-        ),
+          backgroundColor: Colors.blueGrey[600],
+          body: Builder(
+            builder: (context) {
+              if (_hasPermissions) {
+                return _buildCompass();
+              } else {
+                return _buildPermissionSheet();
+              }
+            },
+          ),
       ),
     );
   }
@@ -78,7 +77,6 @@ class _MyAppState extends State<MyApp> {
                   child: Text("Device does not have sensors !"),
                 );
               }
-
               return NeuCircle(
                 child: Transform.rotate(
                   angle: (direction * (math.pi / 180) * -1),

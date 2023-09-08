@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:compassapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+
 
 // import 'package:second_proj/main.dart';
 // import 'package:second_proj/pages/HomePage.dart';
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   InAppPurchase _iap = InAppPurchase.instance;
   bool available = true;
   late StreamSubscription subscription;
-  final String myProductId = "tasktracker"; //sub-monthly-020
+  final String myProductId = "geocompass"; //sub-monthly-020
   bool purchase = false;
   List purchaseList = [];
   List product = [];
@@ -32,8 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
         _listenToPurchaseUpdated(purchaseDetailsList);
       }, onDone: () {}, onError: (error) {});
       setData();
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (context) =>   ));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MyApp()));
     });
 
     super.initState();
@@ -78,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
     available = await _iap.isAvailable();
     if (available) {
       await _iap.restorePurchases().then((value) => {});
-      Future.delayed(Duration(seconds: 2)).then((value) {
+      Future.delayed(const Duration(seconds: 2)).then((value) {
         if (tryPayment) {
           setState(() {
             showPayButton = true;
@@ -90,7 +92,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> getProduct() async {
-    Set<String> ids = Set.from(["tasktracker"]);
+    Set<String> ids = Set.from(["geocompass"]);
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
     print('Could not find ----> ${response.notFoundIDs.length}/${ids.length}');
     print(response.notFoundIDs);
@@ -110,28 +112,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Container(
-                child: Image(image: AssetImage('assets/taskLogo.png'))),
-          ),
-          if (showPayButton)
-            TextButton(
-                style: TextButton.styleFrom(
-                    primary: Color.fromARGB(255, 255, 255, 255),
-                    backgroundColor: Color(0xff7c1034)),
-                onPressed: () {
-                  setData();
-                },
-                child: Text(
-                  "Pay Now",
-                  style: TextStyle(fontSize: 20),
-                ))
-        ],
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                  child: const Image(image: AssetImage('assets/logo.png'))),
+            ),
+            if (showPayButton)
+              TextButton(
+                  style: TextButton.styleFrom(
+                      primary: Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: Color(0xff7c1034)),
+                  onPressed: () {
+                    setData();
+                  },
+                  child: const Text(
+                    "Pay Now",
+                    style: TextStyle(fontSize: 20),
+                  ))
+          ],
+        ),
       ),
     );
   }
